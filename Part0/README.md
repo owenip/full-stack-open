@@ -4,3 +4,7 @@
 
 ### [Exercise 4](Exercise4.md)
 Create a similar diagram depicting the situation where the user creates a new note on the page https://studies.cs.helsinki.fi/exampleapp/notes by writing something into the text field and clicking the submit button.
+
+![image Exercise 4](Exercise4.png)
+
+### [Exercise 5]()
