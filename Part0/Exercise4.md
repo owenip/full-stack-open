@@ -5,9 +5,11 @@ sequenceDiagram
     
     browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
     activate server
+    
     server-->>browser: 302 URL Redirect (https://studies.cs.helsinki.fi/exampleapp/new_note)
     deactivate server
-    
+    Note over browser: Server responds with HTTP code 302 (URL redirect) <br>which is asking the browser to do a new HTTP GET <br> request to given address in the header's Location.
+
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/new_note
     activate server
     server-->>browser: HTML document
