@@ -1,4 +1,4 @@
-### [Part 0 - Fundamentals of Web apps](https://fullstackopen.com/en/part0)
+## [Part 0 - Fundamentals of Web apps](https://fullstackopen.com/en/part0)
 - General Info
 - Fundamentals of Web apps
 
@@ -8,3 +8,6 @@ Create a similar diagram depicting the situation where the user creates a new no
 ![image Exercise 4](Exercise4.png)
 
 ### [Exercise 5]()
+Create a diagram depicting the situation where the user goes to the single-page app version of the notes app at https://studies.cs.helsinki.fi/exampleapp/spa.
+
+![image Exercise 5](Exercise5.png)
