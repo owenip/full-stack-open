@@ -6,3 +6,10 @@ Learn React, Redux, Node.js, MongoDB, GraphQL and TypeScript in one go! This cou
 - General Info
 - Fundamentals of Web apps
 - [Exercises](Part0/README.md)
+
+### [Part 1 - Introduction to React](https://fullstackopen.com/en/part1)
+- Introduction to React
+- Javascript
+- Component state, event handlers
+- A more complex state, debugging Reach apps
+- [Exercises](Part1/README.md)
