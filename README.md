@@ -13,3 +13,10 @@ Learn React, Redux, Node.js, MongoDB, GraphQL and TypeScript in one go! This cou
 - Component state, event handlers
 - A more complex state, debugging Reach apps
 - [Exercises](Part1/README.md)
+
+### [Part 2 - Communicating with server](https://fullstackopen.com/en/part2)
+- Rendering a collection, modules
+- Forms
+- Getting data from server
+- Altering data in server
+- Adding style to React apps
