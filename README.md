@@ -20,3 +20,4 @@ Learn React, Redux, Node.js, MongoDB, GraphQL and TypeScript in one go! This cou
 - Getting data from server
 - Altering data in server
 - Adding style to React apps
+- [Exercises](Part2/README.md)
