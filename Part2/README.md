@@ -7,4 +7,5 @@
 
 ### Exercise
 * [Exercise 2.1-2.5 Course info](https://github.com/owenip/full-stack-open/tree/main/Part2/courseinfo)
-* [Exercise 2.5-2.15 Phonebook](https://github.com/owenip/full-stack-open/tree/main/Part2/phonebook)
+* [Exercise 2.5-2.17 Phonebook](https://github.com/owenip/full-stack-open/tree/main/Part2/phonebook)
+* [Exercise 2.18-2.20 Countries](https://github.com/owenip/full-stack-open/tree/main/Part2/countries)

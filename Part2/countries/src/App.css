@@ -1,0 +1,8 @@
+.wrapper {
+  display: flex;
+  margin: 5px;
+}
+
+p {
+  margin: 5px;
+}
