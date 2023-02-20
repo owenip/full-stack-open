@@ -21,3 +21,10 @@ Learn React, Redux, Node.js, MongoDB, GraphQL and TypeScript in one go! This cou
 - Altering data in server
 - Adding style to React apps
 - [Exercises](Part2/README.md)
+
+### [Part 3 - Communicating with server](https://fullstackopen.com/en/part3)
+- Node.js and Express
+- Deploying app to internet
+- Saving data to MongoDB
+- Validation and ESLint
+- [Exercises](Part3/README.md)
