@@ -47,8 +47,32 @@ app.get('/api/persons/:id', (request, response) => {
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id);
     persons = persons.filter(person => person.id !== id);
-    
+
     response.status(204).end();
+});
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+
+    const requiredFields = ['name', 'number'];
+    for (const field of requiredFields) {
+        try {
+            validateRequestData(response, field, body);
+        } catch (error) {
+            response.status(400).json({ error: error });
+            return;
+        }
+    }
+
+    const person = {
+        id: generateNewId(),
+        name: body.name,
+        number: body.number,
+    }
+
+    persons = persons.concat(person);
+
+    response.json(person);
 });
 
 app.get('/info', (request, response) => {
@@ -57,6 +81,25 @@ app.get('/info', (request, response) => {
         <p>${new Date()}</p>`
     );
 });
+
+const generateNewId = () => {
+    return Math.floor(Math.random() * 9999);
+}
+
+const validateRequestData = (response, fieldName, requestData) => {
+    if (!requestData.hasOwnProperty(fieldName)) {
+        throw `${fieldName} is missing`;
+    }
+
+    if (fieldName === 'name') {
+        const nameAlreadyExist = persons.filter(person => person.name === requestData.name).length > 0;
+        if (nameAlreadyExist) {
+            throw `name must be unique`;
+        }
+    }
+
+    return true;
+}
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
