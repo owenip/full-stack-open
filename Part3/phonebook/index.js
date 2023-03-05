@@ -3,8 +3,9 @@ const express = require('express');
 const { response } = require('express');
 const morgan = require('morgan');
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
+app.use(express.static('build'));
 app.use(express.json());
 
 morgan.token('request-body', (req, res) => {
