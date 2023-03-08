@@ -1,9 +1,12 @@
+require('dotenv').config();
 const http = require('http');
 const express = require('express');
 const { response } = require('express');
 const morgan = require('morgan');
 const app = express();
-const PORT = process.env.PORT || 3001;
+const Person = require('./models/person');
+
+const PORT = process.env.PORT;
 
 app.use(express.static('build'));
 app.use(express.json());
@@ -14,93 +17,85 @@ morgan.token('request-body', (req, res) => {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms - :request-body'));
 
-let persons = [
-    {
-        "id": 1,
-        "name": "Arto Hellas",
-        "number": "040-123456"
-    },
-    {
-        "id": 2,
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523"
-    },
-    {
-        "id": 3,
-        "name": "Dan Abramov",
-        "number": "12-43-234345"
-    },
-    {
-        "id": 4,
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122"
-    }
-];
-
 app.get('/api/persons', (request, response) => {
-    response.json(persons);
+    Person.find({}).then(persons => {
+        const result = persons.map(person => {
+            return person.toJSON();
+        })
+
+        response.status(200).json(result);
+    }).catch(error => {
+        console.error(error);
+    })
 });
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id);
-    const person = persons.find(person => person.id === id);
-
-    if (person) {
-        response.json(person);
-    }
-
-    response.status(404).end();
+    const person_id = request.params.id;
+    Person.findById(person_id).then(person => {
+        response.json(person.toJSON());
+    }).catch(error => {
+        response.status(404).end();
+    })
 });
 
 app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id);
-    persons = persons.filter(person => person.id !== id);
-
-    response.status(204).end();
+    const person_id = request.params.id;
+    Person.findByIdAndRemove(person_id).then(result => {
+        response.status(204).end();
+    }).catch(error => {
+        console.error(error);
+        response.status(400).end();
+    })
 });
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', async (request, response) => {
     const body = request.body
 
     const requiredFields = ['name', 'number'];
     for (const field of requiredFields) {
         try {
-            validateRequestData(response, field, body);
+            await validateRequestData(response, field, body);
         } catch (error) {
             response.status(400).json({ error: error });
             return;
         }
     }
 
-    const person = {
-        id: generateNewId(),
+    const person = new Person({
         name: body.name,
         number: body.number,
-    }
+    });
 
-    persons = persons.concat(person);
+    person.save().then(savedPerson => {
+        response.json(savedPerson.toJSON());
+    }).catch(error => {
+        response.status(400).json({ error: error });
+        return;
+    })
 
-    response.json(person);
 });
 
 app.get('/info', (request, response) => {
-    response.send(
-        `<p>Phonebook has info for ${persons.length} ${persons.length > 1 ? 'people' : 'person'}</p>
-        <p>${new Date()}</p>`
-    );
+    Person.countDocuments({}).then(count => {
+        response.send(
+            `<p>Phonebook has info for ${count} ${count > 1 ? 'people' : 'person'}</p>
+            <p>${new Date()}</p>`
+        );
+    }).catch(error => {
+        response.status(400).json({ error: error });
+        return;
+    })
+
+
 });
 
-const generateNewId = () => {
-    return Math.floor(Math.random() * 9999);
-}
-
-const validateRequestData = (response, fieldName, requestData) => {
+const validateRequestData = async (response, fieldName, requestData) => {
     if (!requestData.hasOwnProperty(fieldName)) {
         throw `${fieldName} is missing`;
     }
 
     if (fieldName === 'name') {
-        const nameAlreadyExist = persons.filter(person => person.name === requestData.name).length > 0;
+        const nameAlreadyExist = (await Person.exists({ name: requestData.name })) !== null;
         if (nameAlreadyExist) {
             throw `name must be unique`;
         }
