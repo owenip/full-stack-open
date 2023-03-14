@@ -10,5 +10,5 @@ Deployed Phonebook project on Fly.io :
 
 ## Exercise
 
-- [Exercises 3.1-3.14 phonebook](https://github.com/owenip/full-stack-open/tree/main/Part3/phonebook)
+- [Exercises 3.1-3.11, 3.13-3.18 phonebook](https://github.com/owenip/full-stack-open/tree/main/Part3/phonebook)
 - [Exercises 3.12 Command-line database](https://github.com/owenip/full-stack-open/tree/main/Part3/phonebook/mongo.js)
