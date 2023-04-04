@@ -110,12 +110,12 @@ app.get('/info', (request, response) => {
 
 app.get('/outboundIP', (request, response) => {
     http.get(request.protocol + '://' + request.get('host')
-        , (req, res) => {
-            const parseIp = (req) =>
-                req.headers['x-forwarded-for']?.split(',').shift()
-                || req.socket?.remoteAddress;
-
-            response.json({ ip: parseIp(req) });
+        , (req) => {
+            response.json({
+                'x-forwarded-for': req.headers['x-forwarded-for']?.split(',').shift() ?? '',
+                'socket.remoteAddress': req.socket?.remoteAddress ?? '',
+                'req.ip': req.ip,
+            });
         });
 });
 
