@@ -107,6 +107,16 @@ app.get('/info', (request, response) => {
 
 });
 
+app.get('/outboundIP', (request, response) => {
+    http.get('http://localhost:3001', (req, res) => {
+        const parseIp = (req) =>
+            req.headers['x-forwarded-for']?.split(',').shift()
+            || req.socket?.remoteAddress;
+
+        response.json({ ip: parseIp(req) });
+    });
+});
+
 const validateRequestData = async (response, fieldName, requestData) => {
     if (!requestData.hasOwnProperty(fieldName)) {
         throw `${fieldName} is missing`;
