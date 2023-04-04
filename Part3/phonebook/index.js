@@ -5,6 +5,7 @@ const { response } = require('express');
 const morgan = require('morgan');
 const app = express();
 const Person = require('./models/person');
+const { log } = require('console');
 
 const PORT = process.env.PORT;
 
@@ -108,13 +109,14 @@ app.get('/info', (request, response) => {
 });
 
 app.get('/outboundIP', (request, response) => {
-    http.get('http://localhost:3001', (req, res) => {
-        const parseIp = (req) =>
-            req.headers['x-forwarded-for']?.split(',').shift()
-            || req.socket?.remoteAddress;
+    http.get(request.protocol + '://' + request.get('host')
+        , (req, res) => {
+            const parseIp = (req) =>
+                req.headers['x-forwarded-for']?.split(',').shift()
+                || req.socket?.remoteAddress;
 
-        response.json({ ip: parseIp(req) });
-    });
+            response.json({ ip: parseIp(req) });
+        });
 });
 
 const validateRequestData = async (response, fieldName, requestData) => {
