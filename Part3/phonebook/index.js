@@ -1,18 +1,16 @@
 require('dotenv').config();
 const http = require('http');
 const express = require('express');
-const { response } = require('express');
 const morgan = require('morgan');
 const app = express();
 const Person = require('./models/person');
-const { log } = require('console');
 
 const PORT = process.env.PORT;
 
 app.use(express.static('build'));
 app.use(express.json());
 
-morgan.token('request-body', (req, res) => {
+morgan.token('request-body', (req) => {
     return JSON.stringify(req.body);
 });
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms - :request-body'));
@@ -44,7 +42,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
     const person_id = request.params.id;
-    Person.findByIdAndRemove(person_id).then(result => {
+    Person.findByIdAndRemove(person_id).then(() => {
         response.status(204).end();
     }).catch(error => {
         next(error);
@@ -120,21 +118,21 @@ app.get('/outboundIP', (request, response) => {
 });
 
 const validateRequestData = async (response, fieldName, requestData) => {
-    if (!requestData.hasOwnProperty(fieldName)) {
+    if (!Object.prototype.hasOwnProperty.call(requestData, fieldName)) {
         throw `${fieldName} is missing`;
     }
 
     if (fieldName === 'name') {
         const nameAlreadyExist = (await Person.exists({ name: requestData.name })) !== null;
         if (nameAlreadyExist) {
-            throw `name must be unique`;
+            throw 'name must be unique';
         }
     }
 
     return true;
 };
 
-const errorHandler = (error, request, response, next) => {
+const errorHandler = (error, request, response) => {
     console.error(error.message);
 
     if (error.name === 'CastError') {
