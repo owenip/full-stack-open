@@ -13,19 +13,19 @@ app.use(express.json());
 
 morgan.token('request-body', (req, res) => {
     return JSON.stringify(req.body);
-});
+})
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms - :request-body'));
 
 app.get('/api/persons', (request, response, next) => {
     Person.find({}).then(persons => {
         const result = persons.map(person => {
             return person.toJSON();
-        });
+        })
 
         response.status(200).json(result);
     }).catch(error => {
         next(error);
-    });
+    })
 });
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -38,7 +38,7 @@ app.get('/api/persons/:id', (request, response, next) => {
         }
     }).catch(error => {
         next(error);
-    });
+    })
 });
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -47,10 +47,10 @@ app.delete('/api/persons/:id', (request, response, next) => {
         response.status(204).end();
     }).catch(error => {
         next(error);
-    });
+    })
 });
 
-app.post('/api/persons', async (request, response, next) => {
+app.post('/api/persons', async (request, response) => {
     const body = request.body;
 
     const requiredFields = ['name', 'number'];
@@ -71,9 +71,9 @@ app.post('/api/persons', async (request, response, next) => {
     person.save().then(savedPerson => {
         response.json(savedPerson.toJSON());
     }).catch(error => {
-        next(error);
+        response.status(400).json({ error: error });
         return;
-    });
+    })
 });
 
 app.put('/api/persons/:id', async (request, response, next) => {
@@ -86,12 +86,12 @@ app.put('/api/persons/:id', async (request, response, next) => {
         next(error);
     }
 
-    Person.findOneAndUpdate({ _id: person_id }, { number: body.number }, { returnOriginal: false, runValidators: true }).then(result => {
+    Person.findOneAndUpdate({ _id: person_id }, { number: body.number }, { returnOriginal: false }).then(result => {
         response.json(result.toJSON());
     }).catch(error => {
         next(error);
-    });
-});
+    })
+})
 
 app.get('/info', (request, response) => {
     Person.countDocuments({}).then(count => {
@@ -102,7 +102,7 @@ app.get('/info', (request, response) => {
     }).catch(error => {
         response.status(400).json({ error: error });
         return;
-    });
+    })
 
 
 });
@@ -120,21 +120,19 @@ const validateRequestData = async (response, fieldName, requestData) => {
     }
 
     return true;
-};
+}
 
 const errorHandler = (error, request, response, next) => {
     console.error(error.message);
 
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'Incorrect Id' });
-    } else if (error.name === 'ValidationError') {
-        return response.status(400).json({ error: error.message });
     }
 
-    next(error);
-};
-
+    response.status(400).JSON(error);
+}
 app.use(errorHandler);
+
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`)
 });

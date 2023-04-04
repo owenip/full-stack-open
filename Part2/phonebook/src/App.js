@@ -16,9 +16,9 @@ const App = () => {
     const showNotification = (message, type) => {
         setNotification({ message: message, type: type });
         setTimeout(() => {
-            setNotification({ message: '', type: '' });
+            setNotification({ message: '', type: '' })
         }, 3000);
-    };
+    }
 
     const showError = useCallback((message) => {
         showNotification(message, 'error');
@@ -26,7 +26,7 @@ const App = () => {
 
     const showInfo = (message) => {
         showNotification(message, 'info');
-    };
+    }
 
     const fetchDbHook = useCallback(() => {
         PersonService.getAll()
@@ -38,7 +38,7 @@ const App = () => {
             });
     }, [showError]);
 
-    useEffect(() => { fetchDbHook(); }, [fetchDbHook]);
+    useEffect(() => { fetchDbHook() }, [fetchDbHook]);
 
     const handleSubmitPerson = (event) => {
         event.preventDefault();
@@ -54,12 +54,9 @@ const App = () => {
                     number: newNumber
                 })
                 .then(person => {
-                    setPersons(persons.concat(person));
+                    setPersons(persons.concat(person))
                     showInfo(`Added ${person.name}`);
                 })
-                .catch(error => {
-                    showError(error.response.data.error ?? `Failed to add ${newName}`);
-                });
         } else {
             if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
                 const updatingPerson = {
@@ -74,11 +71,10 @@ const App = () => {
                         showInfo(`Updated ${returnedPerson.name}`);
                     })
                     .catch(error => {
-                        console.log(error);
                         if (error.response.status === 404) {
                             showError(`Information of ${updatingPerson.name} has already been removed from server`);
                         } else {
-                            showError(error.response.data.error ?? `Failed to update ${updatingPerson.name}`);
+                            showError(`Failed to update ${updatingPerson.name}`);
                         }
                     });
             }
@@ -86,7 +82,7 @@ const App = () => {
 
         setNewName('');
         setNewNumber('');
-    };
+    }
 
     const getPersonByName = (name) => {
         for (let i = 0; i < persons.length; i++) {
@@ -96,7 +92,7 @@ const App = () => {
         }
 
         return null;
-    };
+    }
 
     const checkIfInputEmpty = (fieldName, value) => {
         if (value === '') {
@@ -105,7 +101,7 @@ const App = () => {
         }
 
         return false;
-    };
+    }
 
     const handleDeletePerson = (id, name) => {
         if (window.confirm(`Delete ${name} ?`)) {
@@ -116,19 +112,19 @@ const App = () => {
                     showError(`Error occured when deleting information of ${name}`);
                 });
         }
-    };
+    }
 
     const handleNameChange = (event) => {
         setNewName(event.target.value);
-    };
+    }
 
     const handleNumberchange = (event) => {
         setNewNumber(event.target.value);
-    };
+    }
 
     const handleFilterChange = (event) => {
         setNameFilter(event.target.value);
-    };
+    }
 
     return (
         <div>
@@ -138,7 +134,7 @@ const App = () => {
             <PersonForm newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberchange={handleNumberchange} handleSubmitPerson={handleSubmitPerson} />
             <Phonebook persons={persons} nameFilter={nameFilter} handleDeletePerson={handleDeletePerson} />
         </div>
-    );
-};
+    )
+}
 
-export default App;
+export default App
