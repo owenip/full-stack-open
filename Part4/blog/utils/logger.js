@@ -1,11 +1,15 @@
-const info = (...parms) => {
-    console.log(...parms);
+import chalk from "chalk";
+
+const log = console.log;
+
+const info = (...params) => {
+    log(chalk.green('INFO:'), ...params.map(param => chalk.green(param)));
 };
 
-const error = (...parms) => {
-    console.error(...parms);
+const error = (...params) => {
+    log(chalk.red('ERROR:'), ...params.map(param => chalk.blue(param)));
 };
 
-module.exports = {
+export {
     info, error
 };

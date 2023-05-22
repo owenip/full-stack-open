@@ -7,3 +7,7 @@ module.exports = {
     MONGODB_URI,
     PORT
 };
+
+export default {
+    PORT, MONGODB_URI
+};
