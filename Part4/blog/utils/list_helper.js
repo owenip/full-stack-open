@@ -18,10 +18,18 @@ const favoriteBlog = (blogs) => {
     }, {});
 };
 
-const mostBlogs = (blogs) => {
-    return _.reduce(_.countBy(blogs, 'author'), (result, numOfBlogs, author) => {
-        return !numOfBlogs.numOfBlogs || result.numOfBlogs < numOfBlogs ? { author, numOfBlogs } : result;
-    }, {}).author;
+const mostBlogs = (blog_list) => {
+    return _.reduce(_.countBy(blog_list, 'author'), (accum, totol_blogs, author) => {
+        return !accum.blogs || accum.blogs < totol_blogs ? { author, blogs: totol_blogs } : accum;
+    }, {});
+};
+
+const mostLike = (blogs) => {
+    const author = _.maxBy(blogs, 'likes').author;
+    return {
+        author,
+        likes: _.sumBy(_.filter(blogs, { author }), 'likes')
+    };
 };
 
 module.exports = {
@@ -29,4 +37,5 @@ module.exports = {
     totalLikes,
     favoriteBlog,
     mostBlogs,
+    mostLike,
 };
